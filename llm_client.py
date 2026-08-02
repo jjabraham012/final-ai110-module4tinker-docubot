@@ -5,6 +5,7 @@ Handles:
 - Configuring the Gemini client from the GEMINI_API_KEY environment variable
 - Naive "generation only" answers over the full docs corpus (Phase 0)
 - RAG style answers that use only retrieved snippets (Phase 2)
+- Agentic helpers: query reformulation and answer self-checking (capstone)
 
 Experiment with:
 - Prompt wording
@@ -120,3 +121,116 @@ Rules:
             return (response.text or "").strip()
         except Exception as e:
             return f"API error — could not generate answer. ({type(e).__name__}: {e})"
+
+    # -----------------------------------------------------------
+    # Agentic helper: query reformulation
+    # -----------------------------------------------------------
+
+    def reformulate_query(self, original_query, attempt_number, previous_attempts=None):
+        """
+        Agentic step: when retrieval finds nothing useful, ask Gemini to
+        rephrase the question using different keywords/synonyms that are
+        more likely to match how the documentation is actually worded.
+
+        previous_attempts: optional list of query strings already tried in
+        this run (including the original). Passed back to the model so it
+        doesn't suggest the same rephrasing twice — without this, Gemini
+        tends to converge on the same "obvious" rewording every time.
+
+        Returns a single reformulated query string (no explanation, no
+        quotes) so it can be fed straight back into DocuBot.retrieve().
+        Falls back to the original query if the API call fails, so the
+        agent loop can keep going instead of crashing.
+        """
+        previous_attempts = previous_attempts or []
+        already_tried_block = ""
+        if previous_attempts:
+            tried_list = "\n".join(f'- "{q}"' for q in previous_attempts)
+            already_tried_block = f"""
+These phrasings have already been tried and did NOT find a good answer.
+Do not repeat any of them — suggest something genuinely different:
+{tried_list}
+"""
+
+        prompt = f"""
+You are helping a documentation search tool find better keywords.
+
+The original developer question is:
+"{original_query}"
+{already_tried_block}
+Suggest ONE alternative way to phrase this same question using different
+but related keywords/synonyms that might appear in technical
+documentation (for example "auth token" -> "access token", "database" ->
+"connection string").
+
+Reply with ONLY the reformulated question. No quotes, no explanation,
+no numbering.
+"""
+        try:
+            response = self.client.models.generate_content(
+                model=GEMINI_MODEL_NAME,
+                contents=prompt
+            )
+            reformulated = (response.text or "").strip()
+            return reformulated if reformulated else original_query
+        except Exception:
+            return original_query
+
+    # -----------------------------------------------------------
+    # Agentic helper: self-check a draft answer against the evidence
+    # -----------------------------------------------------------
+
+    def check_answer_supported(self, query, snippets, draft_answer):
+        """
+        Agentic step: after generating a draft answer, ask Gemini to verify
+        the answer is actually supported by the retrieved snippets, rather
+        than trusting the first draft blindly.
+
+        Returns (is_supported: bool, reasoning: str). If the check itself
+        fails (e.g. API error), fails safe by returning False so the agent
+        falls back to a refusal instead of risking a hallucination.
+        """
+        context_blocks = []
+        for filename, text in snippets:
+            context_blocks.append(f"File: {filename}\n{text}\n")
+        context = "\n\n".join(context_blocks)
+
+        prompt = f"""
+You are fact-checking an AI-generated answer against source documentation.
+
+Question:
+{query}
+
+Source snippets:
+{context}
+
+Draft answer to check:
+{draft_answer}
+
+Does the draft answer rely ONLY on information present in the source
+snippets above, with no invented details (no made-up functions, endpoints,
+config values, or facts not stated in the snippets)?
+
+Reply in exactly this format:
+VERDICT: YES or NO
+REASON: one short sentence
+"""
+        try:
+            response = self.client.models.generate_content(
+                model=GEMINI_MODEL_NAME,
+                contents=prompt
+            )
+            text = (response.text or "").strip()
+
+            verdict = ""
+            reason = ""
+            for line in text.splitlines():
+                if line.upper().startswith("VERDICT:"):
+                    verdict = line.split(":", 1)[1].strip().upper()
+                elif line.upper().startswith("REASON:"):
+                    reason = line.split(":", 1)[1].strip()
+
+            is_supported = verdict.startswith("YES")
+            return is_supported, (reason or text)
+        except Exception as e:
+            return False, f"Self-check failed due to error: {type(e).__name__}"

@@ -1,0 +1,71 @@
+2026-08-01 19:11:33,415 | INFO | Attempt 1 | query='Where is the auth token generated?' | snippets_found=5
+2026-08-01 19:11:33,424 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:11:34,172 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:11:34,175 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:11:34,700 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:11:34,702 | INFO | Self-check supported=True | reasoning=The draft answer accurately reflects the information in the provided source snippets without adding any outside details.
+2026-08-01 19:11:54,957 | INFO | Attempt 1 | query='What color scheme does the frontend use?' | snippets_found=1
+2026-08-01 19:11:54,957 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:11:55,436 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:11:55,437 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:11:55,925 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:11:55,927 | INFO | Self-check supported=True | reasoning=The draft correctly states it does not know because the information about the frontend color scheme is not in the provided source snippet.
+2026-08-01 19:12:12,495 | INFO | Attempt 1 | query='How do I connect to the storage layer?' | snippets_found=1
+2026-08-01 19:12:12,495 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:12:13,074 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:12:13,076 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:12:13,538 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:12:13,539 | INFO | Self-check supported=True | reasoning=The draft correctly states it does not know because the snippets lack connection instructions.
+2026-08-01 19:12:42,522 | INFO | Attempt 1 | query='How do I get a session credential from the login API?' | snippets_found=5
+2026-08-01 19:12:42,522 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:12:43,031 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:12:43,033 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:12:43,581 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:12:43,582 | INFO | Self-check supported=True | reasoning=The draft correctly states it does not know because the snippets only mention the endpoint without providing instructions on how to get credentials.
+2026-08-01 19:12:57,221 | INFO | Attempt 1 | query='What environment variables do I need to set before the app can authenticate users?' | snippets_found=5
+2026-08-01 19:12:57,222 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:12:57,776 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:12:57,777 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:12:58,361 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:12:58,363 | INFO | Self-check supported=True | reasoning=The draft correctly states it does not know because the snippets mention that environment variables are required for authentication, but do not list their actual names or values.
+2026-08-01 19:13:10,254 | INFO | Attempt 1 | query='What is the default token expiration time in seconds?' | snippets_found=5
+2026-08-01 19:13:10,254 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:13:10,799 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:13:10,800 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:13:11,281 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:13:11,283 | INFO | Self-check supported=True | reasoning=The draft answer accurately states the default expiration time found in the AUTH.md snippet without adding outside information.
+2026-08-01 19:18:40,904 | INFO | Attempt 1 | query='How do I get a session credential from the login API?' | snippets_found=5
+2026-08-01 19:18:40,905 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:20:06,653 | INFO | Attempt 1 | query='How do I get a session credential from the login API?' | snippets_found=5
+2026-08-01 19:20:06,653 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:20:07,178 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:20:07,180 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:20:19,629 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:20:19,631 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:20:20,117 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:20:20,119 | INFO | Self-check supported=True | reasoning=The draft correctly states it does not know because the snippets only mention the endpoint without providing instructions on how to get a credential.
+2026-08-01 19:25:48,672 | INFO | Attempt 1 | query='How do I get a session credential from the login API?' | snippets_found=5
+2026-08-01 19:25:48,673 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:25:49,341 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:25:49,344 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:25:49,875 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:25:49,876 | INFO | Self-check supported=True | reasoning=The draft correctly states it does not know because the snippets only mention the login endpoint without detailing how to get a session credential.
+2026-08-01 19:27:56,476 | INFO | Attempt 1 | query='How do I get a session credential from the login API?' | snippets_found=5
+2026-08-01 19:27:56,476 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:27:57,499 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:27:57,502 | INFO | Draft was a refusal, not a real answer — treating as failed attempt
+2026-08-01 19:27:57,503 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:27:57,952 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:27:57,954 | INFO | Reformulated query -> 'How to retrieve an authentication token from the sign-in endpoint'
+2026-08-01 19:27:57,957 | INFO | Attempt 2 | query='How to retrieve an authentication token from the sign-in endpoint' | snippets_found=5
+2026-08-01 19:27:57,957 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:27:58,386 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:27:58,388 | INFO | Draft was a refusal, not a real answer — treating as failed attempt
+2026-08-01 19:27:58,388 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:27:59,083 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:27:59,085 | INFO | Reformulated query -> 'How to retrieve an authentication token from the sign-in endpoint'
+2026-08-01 19:27:59,088 | INFO | Attempt 3 | query='How to retrieve an authentication token from the sign-in endpoint' | snippets_found=5
+2026-08-01 19:27:59,088 | INFO | AFC is enabled with max remote calls: 10.
+2026-08-01 19:27:59,488 | INFO | HTTP Request: POST https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-lite-latest:generateContent "HTTP/1.1 200 OK"
+2026-08-01 19:27:59,489 | INFO | Draft was a refusal, not a real answer — treating as failed attempt
+2026-08-01 19:27:59,489 | INFO | Exhausted 3 attempts without a supported answer. Refusing.

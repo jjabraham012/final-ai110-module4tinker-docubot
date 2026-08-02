@@ -1,10 +1,11 @@
 """
-CLI runner for the DocuBot tinker activity.
+CLI runner for DocuBot.
 
-Supports three modes:
+Supports four modes:
 1. Naive LLM generation over all docs (Phase 0)
 2. Retrieval only (Phase 1)
 3. RAG: retrieval plus LLM generation (Phase 2)
+4. Agentic DocuBot: retrieval + query reformulation retries + self-check (capstone)
 """
 
 from dotenv import load_dotenv
@@ -13,6 +14,7 @@ load_dotenv()
 from docubot import DocuBot
 from llm_client import GeminiClient
 from dataset import SAMPLE_QUERIES
+from agent import AnswerAgent
 
 
 def try_create_llm_client():
@@ -33,7 +35,7 @@ def try_create_llm_client():
 def choose_mode(has_llm):
     """
     Asks the user which mode to run.
-    Returns "1", "2", "3", or "q".
+    Returns "1", "2", "3", "4", or "q".
     """
     print("Choose a mode:")
     if has_llm:
@@ -43,8 +45,10 @@ def choose_mode(has_llm):
     print("  2) Retrieval only (no LLM)")
     if has_llm:
         print("  3) RAG (retrieval + LLM)")
+        print("  4) Agentic DocuBot (retrieval + retries + self-check)")
     else:
         print("  3) RAG (unavailable, no GEMINI_API_KEY)")
+        print("  4) Agentic DocuBot (unavailable, no GEMINI_API_KEY)")
     print("  q) Quit")
 
     choice = input("Enter choice: ").strip().lower()
@@ -129,12 +133,50 @@ def run_rag_mode(bot, has_llm):
         print()
 
 
+def run_agentic_mode(agent, has_llm):
+    """
+    Mode 4:
+    Agentic DocuBot. Retrieves, reformulates and retries on weak/failed
+    retrieval, generates a RAG answer, then self-checks the answer against
+    the retrieved evidence before returning it.
+    """
+    if not has_llm or agent is None:
+        print("\nAgentic mode is not available (no GEMINI_API_KEY).\n")
+        return
+
+    queries, label = get_query_or_use_samples()
+    print(f"\nRunning agentic mode on {label}...\n")
+
+    for query in queries:
+        print("=" * 60)
+        print(f"Question: {query}\n")
+        answer, trace = agent.answer(query)
+
+        for step in trace:
+            if "attempt" in step:
+                print(
+                    f"  [attempt {step['attempt']}] "
+                    f"query={step['query_used']!r} "
+                    f"snippets_found={step['num_snippets']}"
+                )
+                if step.get("draft_generated"):
+                    print(
+                        f"    -> self-check: supported={step['self_check']} "
+                        f"({step.get('self_check_reasoning', '')})"
+                    )
+
+        print("\nAnswer:")
+        print(answer)
+        print()
+
+
 def main():
-    print("DocuBot Tinker Activity")
-    print("=======================\n")
+    print("DocuBot")
+    print("=======\n")
 
     llm_client, has_llm = try_create_llm_client()
     bot = DocuBot(llm_client=llm_client)
+    agent = AnswerAgent(bot, llm_client) if has_llm else None
 
     while True:
         choice = choose_mode(has_llm)
@@ -148,8 +190,10 @@ def main():
             run_retrieval_only_mode(bot)
         elif choice == "3":
             run_rag_mode(bot, has_llm)
+        elif choice == "4":
+            run_agentic_mode(agent, has_llm)
         else:
-            print("\nUnknown choice. Please pick 1, 2, 3, or q.\n")
+            print("\nUnknown choice. Please pick 1, 2, 3, 4, or q.\n")
 
 
 if __name__ == "__main__":
