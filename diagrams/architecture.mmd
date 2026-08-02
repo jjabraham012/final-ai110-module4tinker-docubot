@@ -1,0 +1,51 @@
+flowchart TD
+    U["Developer's question<br/>(input)"] --> M["main.py<br/>mode selector"]
+
+    M -->|"mode 1"| NAIVE["Naive LLM mode<br/>(no retrieval)"]
+    M -->|"mode 2"| RETONLY["Retrieval-only mode"]
+    M -->|"mode 3"| RAG["RAG mode"]
+    M -->|"mode 4"| AGENT
+
+    subgraph RETRIEVER["DocuBot (retriever)"]
+        IDX["Inverted index +<br/>paragraph chunks"]
+        SCORE["Score chunks vs. query<br/>(keyword overlap)"]
+        GUARD["Guardrail:<br/>min relevance threshold"]
+        IDX --> SCORE --> GUARD
+    end
+
+    subgraph AGENT["AnswerAgent (agentic workflow)"]
+        direction TB
+        A1["1. Retrieve snippets<br/>for current query"] --> A2{"Any snippets<br/>found?"}
+        A2 -->|"no"| A5
+        A2 -->|"yes"| A3["2. Generate draft answer<br/>(GeminiClient RAG)"]
+        A3 --> A4{"3. Self-check:<br/>is draft actually<br/>supported by evidence?"}
+        A4 -->|"yes"| DONE["Return answer to user<br/>(output)"]
+        A4 -->|"no / refusal"| A5{"Attempts<br/>remaining?"}
+        A5 -->|"yes"| A6["4. Reformulate query<br/>(avoid past phrasings)<br/>GeminiClient"]
+        A6 --> A1
+        A5 -->|"no"| REFUSE["Refuse honestly:<br/>'I do not know based<br/>on these docs'"]
+    end
+
+    RETONLY --> RETRIEVER
+    RAG --> RETRIEVER
+    AGENT --> RETRIEVER
+
+    NAIVE --> LLM["GeminiClient<br/>(LLM generation)"]
+    RAG --> LLM
+    A3 --> LLM
+    A6 --> LLM
+    A4 --> LLM
+
+    DONE --> LOG["agent_log.txt<br/>(every attempt, reformulation,<br/>and self-check verdict logged)"]
+    REFUSE --> LOG
+
+    LOG --> HUMAN["Human review:<br/>developer can audit the<br/>full reasoning trace"]
+
+    EVAL["evaluation.py<br/>(automated testing)"] -.->|"runs SAMPLE_QUERIES,<br/>checks retrieval hit rate"| RETRIEVER
+    EVAL -.->|"reports pass/fail<br/>for human review"| HUMAN
+
+    style AGENT fill:#eef6ff,stroke:#4a90d9
+    style RETRIEVER fill:#f5f5f5,stroke:#888
+    style EVAL fill:#fff4e5,stroke:#d9a441
+    style HUMAN fill:#e8f7e8,stroke:#4caf50
+    style LOG fill:#e8f7e8,stroke:#4caf50
